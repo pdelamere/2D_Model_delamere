@@ -1,5 +1,7 @@
 **/*.dat
 !inputs.dat
+!emis*.dat
+!rec*.dat
 **/*.jpeg
 **/*.jpg
 **/*.png
