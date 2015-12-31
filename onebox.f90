@@ -130,7 +130,8 @@ subroutine model()
   numerical_c_neutral = v_neutral*dt/dx
   numerical_c_ion = v_ion*dt/dx
 
-  if( vrad ) v_ion=1.0-abs(rdist-6.8)
+!  if( vrad ) v_ion=1.0-abs(rdist-6.8)
+  if( vrad ) v_ion=3.0*exp(-(rdist-6.8)**2/(1.0**2))!1.0-abs(rdist-6.8)
   if( .not. vrad .and. .not. vmass) v_ion=1.0
   if( vrad .and. v_ion .lt. 0.0 ) v_ion=0.0
 

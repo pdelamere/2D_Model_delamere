@@ -1,5 +1,4 @@
 **/*.dat
-!./inputs.dat
 **/*.jpeg
 **/*.jpg
 **/*.png
@@ -12,3 +11,4 @@
 ./2DResults
 *~
 torus
+*.mp4

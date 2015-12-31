@@ -12,8 +12,8 @@ pro read_output,filetype,spec,nt,nlng,nr,lng,val,rad
 lng = 0.0
 val = 0.0
 close,1
-fil = './plots/run2/'+filetype+spec+nt+'_3D.dat'
-;fil = './'+filetype+spec+nt+'_3D.dat'
+;fil = '/Volumes/Scratch/2D_Model/run4/'+filetype+spec+nt+'_3D.dat'
+fil = './'+filetype+spec+nt+'_3D.dat'
 print,fil
 openr,1,fil
 ;readf,1,lng,val,rad
@@ -126,16 +126,16 @@ end
 ;main program
 ;-----------------------------------------------------------
 
-nlng = 20
-nr = 18
-filetype='NL2_'
-spec = 's2p'
+nlng = 12
+nr = 10
+filetype='DENS'
+spec = 'elec'
 
 xsz = round(1000/1.0)
 ysz = round(1000/1.0)
-nframe=41
+nframe=10
 nfrm0 = 0
-nstep = 5
+nstep = 1
 
 XINTERANIMATE, SET=[xsz,ysz, nframe-nfrm0], /SHOWLOAD 
 
