@@ -10,3 +10,4 @@
 **/*.o
 ./plots
 ./2DResults
+*~
