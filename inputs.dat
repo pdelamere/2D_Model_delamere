@@ -1,0 +1,28 @@
+6.0	              inner boundary
+10.25                  outter boundary
+12.0                  radial distance past which chemical reactions are neglected
+1.5e28                source rate
+-12.0                 source radial exponent
+2.00                  o_to_s
+0.002                 hot electron fraction
+5.0                   fraction exponent
+3.5e-7                Dll
+4.5                   Dll exponent
+0                     transport (days) #obsolete
+42.0                  tehot hot electron temp in eV
+5.5                   hot electron temperature power law
+0.0                   lag_const subcorotational plasma speed in km/s (Refer to v_ion in ParallelVariables.f90)
+0.0                   neutral_amp
+249.0                 neutral_t0
+25.0                  neutral_width
+0.0                   hote_amp
+269.0                 hote_t0
+45.5                  hote_width
+100                   number of days for the run
+1.0                   number of outputs per day
+0.00                  s value for upwind scheme
+0.030                 initial radial velocity (km/s)
+5.0                   velocity exponent
+1                     radial transport iterations per chemistry iteration
+1                     azimuthal transport iteration per chemistry iteration
+1000.0                dt for chemistry

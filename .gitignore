@@ -1,4 +1,5 @@
 **/*.dat
+!inputs.dat
 **/*.jpeg
 **/*.jpg
 **/*.png
