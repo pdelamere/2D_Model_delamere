@@ -11,7 +11,6 @@ MODULE FUNCTIONS
 
   IMPLICIT NONE
 
-
   CONTAINS
 
   SUBROUTINE cm3_reactions(r_ind2, r_dep2, h2, n2, ft_int2, zoff)
@@ -783,6 +782,56 @@ end function az_loss
 !    if(mype .eq. 0) print *, ""
   end function ft_rad
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!SPACER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  real function ft_rad_sp(lat, T, ind, h)
+    type(lat_dist)    ::lat
+    type(height)      ::h
+    type(temp)        ::T
+    type(r_ind)       ::ind
+    real              ::rad_sp(LAT_SIZE), rad_s2p(LAT_SIZE), rad_s3p(LAT_SIZE)
+    real              ::rad_op(LAT_SIZE), rad_o2p(LAT_SIZE), rad_tot(LAT_SIZE)
+    real              ::x, yarr(LAT_SIZE), elec_tot
+    integer           ::i 
+    real              ::const,stuff
+
+    ft_rad_sp=0.0
+    elec_tot=0.0
+    const=3.69897 !log10(5000)
+    x =(100.0*(1.0+ LOG10(T%elec))/const)
+!    x = T%elec
+    do i=1, LAT_SIZE
+      yarr(i) = 100.0*log10(lat%elec(i))/const
+!      yarr(i) = lat%elec(i)
+    end do
+
+    do i=1, LAT_SIZE
+!      rad_sp(i)=interpolate(ind, ind%emis_sp, x, yarr(i), T%elec, lat%elec(i), i)*lat%sp(i)
+!      rad_s2p(i)=interpolate(ind, ind%emis_s2p, x, yarr(i), T%elec, lat%elec(i), i)*lat%s2p(i)
+!      rad_s3p(i)=interpolate(ind, ind%emis_s3p, x, yarr(i), T%elec, lat%elec(i), i)*lat%s3p(i)
+!      rad_op(i)=interpolate(ind, ind%emis_op, x, yarr(i), T%elec, lat%elec(i), i)*lat%op(i)
+!      rad_o2p(i)=interpolate(ind, ind%emis_o2p, x, yarr(i), T%elec, lat%elec(i), i)*lat%o2p(i)
+      rad_sp(i)=bilinearInterpolate(ind, ind%emis_sp, x, yarr(i), T%elec, lat%elec(i), i)*lat%sp(i)
+!      rad_s2p(i)=bilinearInterpolate(ind, ind%emis_s2p, x, yarr(i), T%elec, lat%elec(i), i)*lat%s2p(i)
+!      rad_s3p(i)=bilinearInterpolate(ind, ind%emis_s3p, x, yarr(i), T%elec, lat%elec(i), i)*lat%s3p(i)
+!      rad_op(i)=bilinearInterpolate(ind, ind%emis_op, x, yarr(i), T%elec, lat%elec(i), i)*lat%op(i)
+!      rad_o2p(i)=bilinearInterpolate(ind, ind%emis_o2p, x, yarr(i), T%elec, lat%elec(i), i)*lat%o2p(i)
+!      rad_sp(i)=interpolate_II(ind, ind%emis_sp, x, yarr(i))*lat%sp(i)
+!      if(mype .eq. 0) print *, i, rad_sp(i), lat%z(i), T%sp, T%elec, lat%elec(i), lat%sp(i) 
+!      rad_s2p(i)=interpolate_II(ind, ind%emis_s2p, x, yarr(i))*lat%s2p(i)
+!      rad_s3p(i)=interpolate_II(ind, ind%emis_s3p, x, yarr(i))*lat%s3p(i)
+!      rad_op(i)=interpolate_II(ind, ind%emis_op, x, yarr(i))*lat%op(i)
+!      rad_o2p(i)=interpolate_II(ind, ind%emis_o2p, x, yarr(i))*lat%o2p(i)
+      rad_tot(i)=rad_sp(i)! + rad_s2p(i) + rad_s3p(i) + rad_op(i) +rad_o2p(i)
+!    print *, i, "<====>", rad_tot(i)
+      ft_rad_sp=ft_rad_sp+rad_tot(i)*lat%elec(i)
+      elec_tot=elec_tot + lat%elec(i)
+!      if(mype .eq. 0) print *, i, rad_tot(i)
+    end do
+ 
+    ft_rad_sp=ft_rad_sp/elec_tot
+!    if(mype .eq. 0) print *, ft_rad, h%elec/Rj, h%sp/Rj, h%s2p/Rj, h%s3p/Rj, h%op/Rj, h%o2p/Rj
+!    if(mype .eq. 0) print *, ""
+  end function ft_rad_sp
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!SPACER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   subroutine emisPrint(xmin, ymin, xmax, ymax, emis)
     integer           ::i, j, xmin, ymin, xmax, ymax
     real              ::emis(EMIS_SIZE, EMIS_SIZE)
@@ -1263,8 +1312,9 @@ subroutine energyBudget(n, h, T, dep, ind, ft, lat, v, nrgy)
 
   nrgy%P_in  = nrgy%s_ion + nrgy%o_ion + nrgy%s_cx + nrgy%o_cx + nrgy%elecHot_eq
 
-  nrgy%Pfast = 1.5 * (fast_sp + fast_s2p + fast_op + fast_o2p)
-  nrgy%Puv   = ft_rad(lat, T, ind, h)
+  nrgy%Pfast  = 1.5 * (fast_sp + fast_s2p + fast_op + fast_o2p)
+  nrgy%Puv    = ft_rad(lat, T, ind, h)
+  nrgy%Puv_sp = ft_rad_sp(lat,T,ind,h)
 
   nrgy%Ptrans         = 1.5 * v_r0/dr * (n%sp*T%sp + n%s2p*T%s2p + n%s3p*T%s3p + n%op*T%op + n%o2p*T%o2p + n%elec*T%elec)
   nrgy%Ptrans_elecHot = 1.5 * v_r0/dr * n%elecHot * T%elecHot

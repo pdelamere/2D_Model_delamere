@@ -88,7 +88,7 @@ MODULE varTypes
 
   TYPE:: energy
     real              ::s_ion=0.0, s_cx=0.0, o_ion=0.0, o_cx=0.0, elecHot_eq=0.0, tot_eq=0.0, P_in=0.0, Puv=0.0, Pfast=0.0 &
-                      , Ptrans=0.0, Ptrans_elecHot=0.0, P_out=0.0 
+                      , Ptrans=0.0, Ptrans_elecHot=0.0, P_out=0.0, Puv_sp=0.0
   END TYPE
 
   TYPE :: reac
