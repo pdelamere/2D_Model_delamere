@@ -1,0 +1,19 @@
+README FILE
+
+Code written by Matthew Copper (mrcopper@alaska.edu) for Master degree research at University of Alaska Fairbanks.  
+
+This code simulates Io plasma torus on a global scale in 2 dimensions. The code is written in fortran 90 using mpi for parallelization. The script 'do' compiles the program, runs the executable, and plots the results. The program output for run time info and debugging statement is piped to 'runlog' and does not appear on screen. The program can be controlled through the 'inputs.dat', debug.f90, and ParallelVars.f90. The main portion of the code is in onebox.f90. supporting functions are in functions.f90 and the numerical chemistry iteration scheme is written in timeStep.f90. Radial transport code is in diffusion.f90. 
+
+Required software: 
+In order to fully utilize all scripts additional open source software is required. Supporting software includes gfortran (or other fortran compiler (adjust Makefile accordingly)), open mpi, python, bash, gnuplot, and mencoder. Only compiler and mpi are necessary to run the code but all data handling requires bash and python and all plotting requires gnuplot and video results are composed using mencoder. For reference on how to call certain scripts, look in the bash script "do". Python scripts may use non-standard libraries. If errors occur when using python libraries be sure the library is installed. 
+
+Running the code:
+Before attempting to run, make sure your computer has a fortran compiler and message passing interface (MPI). Modify the COMP variable in the make file to reflect your compiler. 
+This code is fairly versatile and unfortunately complicated to run as a result. For the ease of myself and future users, I have composed a script to handle all compiling, running, data, and plotting. The "do" script is a bash script to handle all my normal single run needs. Changing the "lng" and "rad" will change the number of grid cells in each dimension. Changing "days" will only change the plots. To change the run time of the actual model, refer to inputs.dat. The "days" variable in do should match the designated value in inputs.dat. 
+For running the code in some parameter space, I have made the gatherData.py python script. This script will run through the designated parameter space and store all results in "./plots/archive/". The run outputs will be put in there own folders and labeled using an index. The python script chi2.py will go through all outputs and compile data files for the chi squared fit to different observations of the Io plasma torus. 
+
+Variable locations:
+Most of the important variables can be adjusted in inputs.f90. In addition, there are many flags listed in debug.f90. The flags in debug.f90 are parameterized logical types used to control numerical methods, amount of output, and details such as system 3 and 4 hot electrons. The amplitude of system 3 and 4 hot electrons is set in ParallelVars.f90. 
+
+Some notes on stability:
+This code uses numerical methods which have certain criteria for stability. Change timescales in inputs.dat can affect the stability of those methods. The chemistry timescale acts as the main timescale and all other can iterate an integer number of times per chemistry iteration. When adjusting timescales, lower dt is more stable, however it will take more time to run. When hot electrons are varied in azimuth, the chemistry timescale should be ~2000 seconds. Azimuthal transport should not have stability issues. For fast transport, radial transport may need to iterate many times per chemistry iteration. Radial transport iterations must be scaled with Dll and Dll exponent in "inputs.dat". 

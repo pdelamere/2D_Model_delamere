@@ -1,0 +1,12 @@
+**/*.dat
+!./inputs.dat
+**/*.jpeg
+**/*.jpg
+**/*.png
+**/*.mpeg
+**/*.avi
+**/runlog
+**/*.mod
+**/*.o
+./plots
+./2DResults
