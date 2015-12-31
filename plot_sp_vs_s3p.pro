@@ -12,7 +12,8 @@ pro read_output,filetype,spec,nt,nlng,nr,lng,val,rad
 lng = 0.0
 val = 0.0
 close,1
-fil = './plots/'+filetype+spec+nt+'_3D.dat'
+fil = '/Volumes/Scratch/2D_Model/run_vmass/'+filetype+spec+nt+'_3D.dat'
+;fil = './plots/'+filetype+spec+nt+'_3D.dat'
 ;fil = './'+filetype+spec+nt+'_3D.dat'
 print,fil
 openr,1,fil
@@ -105,8 +106,6 @@ arr(wh) = max(arr)
 
 wh = where((sqrt(xar^2 + yar^2) gt 6.0) and (sqrt(xar^2 + yar^2) lt 9.0))
 minarr = min(arr(wh))
-
-
 
 c = image(arr>minarr,xarr,yarr,/buffer,/current,rgb_table=33,axis_style=2,$
          xrange=[-11,11],yrange=[-11,11],/xsty,/ysty,$
